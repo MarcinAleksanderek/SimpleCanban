@@ -27,7 +27,7 @@ function Column(name) {
 	this.id = randomString();
 	this.name = name;
 	this.element = generateTemplate('column-template', { name: this.name });
-
+	initSortable(this.element.querySelector('ul') , 'card');
 	this.element.querySelector('.column').addEventListener('click', function (event) {
 		if (event.target.classList.contains('btn-delete')) {
 			self.removeColumn();
@@ -41,7 +41,7 @@ function Column(name) {
 Column.prototype = {
 	addCard: function(card) {
 		this.element.querySelector('ul').appendChild(card.element);
-		initSortable(card.element);
+		//initSortable2(card.element.parentNode);
 	},
 	removeColumn: function() {
 		this.element.parentNode.removeChild(this.element);
@@ -73,7 +73,7 @@ var board = {
 	name: 'Kanban Board',
 	addColumn: function(column) {
 		this.element.appendChild(column.element);
-		//initSortable(column.element);
+		initSortable(column.element.parentNode, 'kanban');
 	},
 
 	element: document.querySelector('#board .column-container')
@@ -85,9 +85,9 @@ document.querySelector('#board .create-column').addEventListener('click', functi
 	board.addColumn(column);
 });
 
-function initSortable(el) {
+function initSortable(el, groupName) {
 	var sortable = Sortable.create(el, {
-		group: 'kanban',
+		group: groupName,
 		sort: true,
 		animation: 150
 	});
